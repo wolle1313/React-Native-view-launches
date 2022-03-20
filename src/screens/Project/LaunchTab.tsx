@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {
   FlatList,
-  Modal,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,13 +12,11 @@ import {loadLaunchesBtn} from '../../constants/constants';
 import {useAppDispatch, useAppSelector} from '../../store';
 import {fetchLaunches, selectLaunches} from '../../store/launchesSlice';
 import {colors} from '../../styles';
-import {LaunchInfo} from './LaunchInfo';
+import {navigationTypes} from '../../types';
 import {LaunchRecord} from './LaunchRecord';
 
-export const LaunchTab = () => {
+export const LaunchTab = ({navigation}: navigationTypes) => {
   const dispatch = useAppDispatch();
-  const [openLaunchInfo, setOpenLaunchInfo] = useState(false);
-  const [selectedMission, setSelectedMission] = useState([]);
   const [filterInput, setFilterInput] = useState('');
   const counterValue = useAppSelector(selectLaunches);
   const launchRecords = counterValue.launches;
@@ -57,24 +53,10 @@ export const LaunchTab = () => {
         <FlatList
           data={filteredLaunchRecords}
           renderItem={({item}) => (
-            <LaunchRecord
-              launchData={item}
-              setOpenLaunchInfo={setOpenLaunchInfo}
-              setSelectedMission={setSelectedMission}
-            />
+            <LaunchRecord launchData={item} navigation={navigation} />
           )}
         />
       </View>
-      {openLaunchInfo ? (
-        <Modal visible={openLaunchInfo}>
-          <SafeAreaView>
-            <LaunchInfo
-              setOpenLaunchInfo={setOpenLaunchInfo}
-              selectedMission={selectedMission}
-            />
-          </SafeAreaView>
-        </Modal>
-      ) : null}
     </View>
   );
 };

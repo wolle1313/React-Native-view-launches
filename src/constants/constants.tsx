@@ -19,8 +19,8 @@ export const launchDataTitles: Record<launchDataTitlesTypes, string> = {
 };
 
 export const loadLaunchesBtn = {
-  firstLoad: '20 more launch records',
-  anotherLoad: 'Load 20 launch records',
+  firstLoad: 'Load 20 launch records',
+  anotherLoad: '20 more launch records',
 };
 export const results = {
   noResults: 'No Results :(',

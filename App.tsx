@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StatusBar, StyleSheet} from 'react-native';
+import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Navigation from './src/navigation';
 import {store} from './src/store';
@@ -15,7 +15,5 @@ const App = () => {
     </Provider>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

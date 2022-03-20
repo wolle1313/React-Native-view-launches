@@ -23,3 +23,9 @@ interface linksTypes {
 interface rocketTypes {
   rocket_name: string;
 }
+
+export interface navigationTypes {
+  navigation: {
+    navigate: (localization: string) => void;
+  };
+}

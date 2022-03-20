@@ -1,28 +1,27 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {launchDataTitles} from '../../constants/constants';
+import {useAppDispatch} from '../../store';
+import {selectedMission} from '../../store/launchDetailsSlice';
 import {colors} from '../../styles';
-import {detailsTypes, launchDataTypes} from '../../types';
-interface launchRecordProps {
+import {launchDataTypes, navigationTypes} from '../../types';
+interface launchRecordProps extends navigationTypes {
   launchData: launchDataTypes;
-  setOpenLaunchInfo: (flag: boolean) => void;
-  setSelectedMission: (mission: detailsTypes) => void;
 }
-export const LaunchRecord = ({
-  launchData,
-  setOpenLaunchInfo,
-  setSelectedMission,
-}: launchRecordProps) => {
+export const LaunchRecord = ({launchData, navigation}: launchRecordProps) => {
+  const dispatch = useAppDispatch();
   const selectMission = () => {
-    setSelectedMission({
-      mission_name: launchData.mission_name,
-      details: launchData.details,
-      links: {
-        video_link: launchData.links.video_link,
-        article_link: launchData.links.article_link,
-      },
-    });
-    setOpenLaunchInfo(true);
+    dispatch(
+      selectedMission({
+        mission_name: launchData.mission_name,
+        details: launchData.details,
+        links: {
+          video_link: launchData.links.video_link,
+          article_link: launchData.links.article_link,
+        },
+      }),
+    );
+    navigation.navigate('LaunchInfo');
   };
   return (
     <TouchableWithoutFeedback onPress={selectMission}>

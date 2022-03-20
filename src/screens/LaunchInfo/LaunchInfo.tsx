@@ -3,18 +3,19 @@ import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {colors} from '../../styles';
 import {detailsTypes} from '../../types';
 import {missionDetails} from '../../constants/constants';
+import {useAppSelector} from '../../store';
+import {selectLaunchDetails} from '../../store/launchDetailsSlice';
 interface LaunchInfoProps {
-  setOpenLaunchInfo: (flag: boolean) => void;
-  selectedMission: detailsTypes;
+  navigation: {
+    goBack: () => void;
+  };
 }
 
-export const LaunchInfo = ({
-  setOpenLaunchInfo,
-  selectedMission,
-}: LaunchInfoProps) => {
+export const LaunchInfo = ({navigation}: LaunchInfoProps) => {
+  const selectedMission = useAppSelector(selectLaunchDetails);
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setOpenLaunchInfo(false)}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <View style={styles.backWrapper}>
           <Text style={styles.backText}>Back</Text>
         </View>
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   titleWrapper: {
-    marginVertical: 20,
+    marginVertical: 25,
     alignItems: 'center',
   },
   title: {

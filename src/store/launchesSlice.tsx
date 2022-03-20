@@ -13,15 +13,16 @@ const initialState: launchStateTypes = {
 export const fetchLaunches = createAsyncThunk(
   'launches/fetchFromSpaceX',
   async () => {
-    const launchData = await fetch('https://api.spacex.land/graphql', {
-      method: 'POST',
+    try {
+      const launchData = await fetch('https://api.spacex.land/graphql', {
+        method: 'POST',
 
-      headers: {
-        'Content-Type': 'application/json',
-      },
+        headers: {
+          'Content-Type': 'application/json',
+        },
 
-      body: JSON.stringify({
-        query: `{
+        body: JSON.stringify({
+          query: `{
                               launchesPast(limit: 20) {
                                   mission_name
                                   launch_date_local
@@ -39,14 +40,14 @@ export const fetchLaunches = createAsyncThunk(
                                   details
                               }
                           }`,
-      }),
-    })
-      .then(rawLaunchData => rawLaunchData.json())
-      .then(launchData => launchData.data.launchesPast)
-      .catch(err => {
-        throw err;
-      });
-    return launchData;
+        }),
+      })
+        .then(rawLaunchData => rawLaunchData.json())
+        .then(fetchedLaunchData => fetchedLaunchData.data.launchesPast);
+      return launchData;
+    } catch (err) {
+      throw err;
+    }
   },
 );
 export const launchesSlice = createSlice({
@@ -54,16 +55,19 @@ export const launchesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(fetchLaunches.pending, state => {
-      state.status = 'loading';
-    });
-    builder.addCase(fetchLaunches.fulfilled, (state, {payload}) => {
-      state.status = 'success';
-      state.launches.push(...payload);
-    });
-    builder.addCase(fetchLaunches.rejected, state => {
-      state.status = 'failed';
-    });
+    builder.addCase(fetchLaunches.pending, state => ({
+      ...state,
+      status: 'loading',
+    }));
+    builder.addCase(fetchLaunches.fulfilled, (state, {payload}) => ({
+      ...state,
+      status: 'success',
+      launches: [...state.launches, ...payload],
+    }));
+    builder.addCase(fetchLaunches.rejected, state => ({
+      ...state,
+      status: 'failed',
+    }));
   },
 });
 export const selectLaunches = ({launches}: RootState): launchStateTypes =>
